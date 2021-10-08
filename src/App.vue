@@ -2,23 +2,40 @@
     <b-container fluid="lg">
 
         <main v-if="users.length" class="list">
-            <b-row align-h="center" align-v="center">
-                <b-col lg="8" v-for="user in usersList" :key="user.id">
+
+            <h1 class="text-center mt-1">
+                Clique em um nome!
+            </h1>
+
+            <b-row 
+                align-h="center" 
+                align-v="center" 
+                class="mt-4"
+            >
+                <b-col 
+                    lg="8" 
+                    class="mx-auto" 
+                    v-for="user in usersList" :key="user.id"
+                >
                     <b-card
                         @click="showPosts(user)"
                         v-b-modal.modal-center
                         :title="user.name"
                         bg-variant="dark" 
                         text-variant="white" 
-                        class="text-center"
+                        class="
+                            text-center 
+                            border 
+                            border-light 
+                            border-bottom-1"
                     />
                 </b-col>
             </b-row>
 
-
-            <b-button 
+            <b-button
                 align-h="center"
                 variant="success"
+                class="mx-auto d-flex mt-4"
                 pill
                 v-if="renderShowMoreButtonUsers"
                 @click="showMore('USERS')"
@@ -27,8 +44,9 @@
             </b-button>
         </main>
 
-        <!-- // TODO -->
-        <p v-if="errors">Deu erro!</p>
+        <p v-if="errors">
+            Desculpe. Algo de errado aconteceu =(
+        </p>
 
         <b-modal
             ref="v-modal"
@@ -48,7 +66,12 @@
                     {{ post.body }}
                 </p>
 
-                <b-button @click="hidePost(post.id)">
+                <b-button 
+                    @click="hidePost(post.id)"
+                    variant="outline-danger"
+                    size= "sm"
+                    class="mb-3"
+                >
                     Ocultar
                 </b-button>
             </div>
@@ -58,6 +81,7 @@
                 @click="showMore('POSTS')"
                 pill
                 variant="success"
+                class="mx-auto d-flex mt-3"
             >
                 Mostrar Mais
             </b-button>
@@ -80,7 +104,6 @@ export default {
             selectedUser: null,
             totalUsers: 3,
             totalPosts: 3,
-            showLoader: false,
             errors: false,
         };
     },
@@ -132,19 +155,13 @@ export default {
         hideModal() {
             this.$refs['v-modal'].hide();
         },
-        // Loader
-        toggleLoader() {
-            this.showLoader = !this.showLoader;
-        },
         // Post
         async showPosts(user) {
             this.selectedUser = user;
-            this.toggleLoader();
 
             await this.getUserPosts(user.id);
 
             this.showModal();
-            this.toggleLoader();
         },
         hidePost(postId) {
             const hiddenPosts = this.hiddenPostsIds;
@@ -169,11 +186,7 @@ export default {
         },
     },
     async mounted() {
-        this.toggleLoader();
-
         await this.getUsers();
-   
-        this.toggleLoader();
     }
 };
 </script>
